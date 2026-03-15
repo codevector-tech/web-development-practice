@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Summary</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  >
+</head>
+
+<body>
+
+<div class="container my-5">
+  <h2 class="mb-4">🛒 Order Summary</h2>
+
+  <div class="card">
+    <div class="card-body">
+
+      <p><strong>Product:</strong> <span id="product"></span></p>
+      <p><strong>Price:</strong> ₹<span id="price"></span></p>
+
+      <!-- Quantity Buttons -->
+      <div class="d-flex align-items-center mb-3">
+        <strong class="mr-3">Quantity:</strong>
+        <button class="btn btn-secondary btn-sm" onclick="decreaseQty()">−</button>
+        <span class="mx-3" id="qty">1</span>
+        <button class="btn btn-secondary btn-sm" onclick="increaseQty()">+</button>
+      </div>
+
+      <hr>
+
+      <p><strong>Total Amount:</strong> ₹<span id="total"></span></p>
+      <p><strong>Order Date:</strong> <span id="orderDate"></span></p>
+      <p><strong>Delivery Date:</strong> <span id="deliveryDate"></span></p>
+
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+  // Get order data from localStorage
+  let order = JSON.parse(localStorage.getItem("order"));
+
+  // Safety check
+  if (!order) {
+    alert("No order found!");
+  }
+
+  let quantity = order.quantity;
+
+  // Show initial data
+  document.getElementById("product").innerText = order.productName;
+  document.getElementById("price").innerText = order.price;
+  document.getElementById("qty").innerText = quantity;
+  document.getElementById("total").innerText = order.price * quantity;
+  document.getElementById("orderDate").innerText = order.orderDate;
+  document.getElementById("deliveryDate").innerText = order.deliveryDate;
+
+  // Increase quantity
+  function increaseQty() {
+    quantity++;
+    updateTotal();
+  }
+
+  // Decrease quantity
+  function decreaseQty() {
+    if (quantity > 1) {
+      quantity--;
+      updateTotal();
+    }
+  }
+
+  // Update quantity and total
+  function updateTotal() {
+    document.getElementById("qty").innerText = quantity;
+    document.getElementById("total").innerText = order.price * quantity;
+
+    // Save updated quantity
+    order.quantity = quantity;
+    localStorage.setItem("order", JSON.stringify(order));
+  }
+</script>
+
+</body>
+</html>
